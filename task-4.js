@@ -1,31 +1,13 @@
-const account = {
-  owner: 'Mango',
-  balance: 24000,
-  discount: 0.1,
-  orders: ['order-1', 'order-2', 'order-3'],
-  changeDiscount(value) {
-    this.discount = value; // Write code in this line
-  },
-  showOrders() {
-    return this.orders; // Write code in this line
-  },
-  addOrder(cost, order) {
-    this.balance -= cost; // Write code in this line
-    this.orders.push(order); // Write code in this line
-  },
-};
-const copyAccount = Object.assign({}, account);
-copyAccount.orders = [...account.orders];
-// копируем для автотестов ссылочные типы
+console.log(typeof StringBuilder);
+// 'function'
 
-account.changeDiscount(0.15);
-console.log(account.discount); // 0.15
+const builder = new StringBuilder('.');
 
-console.log(account.showOrders());
-['order-1', 'order-2', 'order-3'];
+builder.append('^');
+console.log(builder.value); // '.^'
 
-account.addOrder(5000, 'order-4');
-console.log(account.balance); // 19000
+builder.prepend('^');
+console.log(builder.value); // '^.^'
 
-console.log(account.showOrders());
-['order-1', 'order-2', 'order-3', 'order-4'];
+builder.pad('=');
+console.log(builder.value); // '=^.^='
