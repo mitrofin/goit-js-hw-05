@@ -1,42 +1,69 @@
-const inventory = {
-  items: ['Knife', 'Gas mask'],
-  add(itemName) {
-    this.items.push(itemName);
-    return `Adding ${itemName} to inventory`;
-  },
-  remove(itemName) {
-    this.items = this.items.filter(item => item !== itemName);
-    return `Removing ${itemName} from inventory`;
-  },
-};
+class Car {
+  // Write code under this line
+  static getSpecs(car) {
+    // статический метод getSpecs(car) который принимает объект-машину как параметр и возвращает шаблонную строку
+    return `maxSpeed: ${car.maxSpeed},  // шаблон
+    speed: ${car.speed},  
+    isOn: ${car.isOn},  
+    distance: ${car.distance}, 
+     price: ${car._price}`;
+  }
+  constructor({ speed = 0, price, maxSpeed, isOn = false, distance = 0 } = {}) {
+    this.speed = speed; //текущая скорость
+    this._price = price; //цена автомобиля
+    this.maxSpeed = maxSpeed; //максимальная скорость
+    this.isOn = isOn; //заведен ли автомобиль, начальное значение false
+    this.distance = distance; //пробег в километрах,начальное значение `0
+  }
+  get price() {
+    return this._price;
+  }
+  set price(value) {
+    this._price = value;
+  }
+  turnOn() {
+    this.isOn = true;
+  }
+  turnOff() {
+    this.isOn = false;
+    this.speed = 0;
+  }
+  accelerate(value) {
+    if (this.speed + value <= this.maxSpeed) {
+      this.speed += value;
+    } else {
+      this.speed = this.maxSpeed;
+    }
+  }
+  decelerate(value) {
+    if (this.speed - value >= 0) {
+      this.speed -= value;
+    } else {
+      this.speed = 0;
+    }
+  }
+  drive(hours) {
+    if (this.isOn) {
+      this.distance += hours * this.speed;
+    }
+  }
+}
 
-const invokeInventoryAction = function (itemName, action) {
-  const act = action(itemName);
-  const msg = `Invoking action on ${itemName}`;
-  return { act, msg };
-};
+const mustang = new Car({ maxSpeed: 200, price: 2000 });
+mustang.turnOn();
+mustang.accelerate(50);
+mustang.drive(2);
 
-const invokeAdd = invokeInventoryAction(
-  'Medkit',
-  inventory.add.bind(inventory), // добавляет элемент к  копии обьекта инвентори
-);
-const arrayAdd = [...inventory.items];
+console.log(Car.getSpecs(mustang));
+// 'maxSpeed: 200, speed: 50, isOn: true, distance: 100, price: 2000'
 
-console.log(invokeAdd);
-//{ act: 'Adding Medkit to inventory', msg: 'Invoking action on Medkit' }
+mustang.decelerate(20);
+mustang.drive(1);
+mustang.turnOff();
 
-console.log(arrayAdd);
-// ['Knife', 'Gas mask', 'Medkit']
+console.log(Car.getSpecs(mustang));
+// 'maxSpeed: 200, speed: 0, isOn: false, distance: 130, price: 2000'
 
-const invokeRemove = invokeInventoryAction(
-  'Gas mask',
-  inventory.remove.bind(inventory), // удаляет элемент у  копии обьекта инвентори
-);
-
-const arrayRemove = [...inventory.items];
-
-console.log(invokeRemove);
-//{ act: 'Removing Gas mask from inventory', msg: 'Invoking action on Gas mask' }
-
-console.log(arrayRemove);
-// ['Knife', 'Medkit']
+console.log(mustang.price); // 2000
+mustang.price = 4000;
+console.log(mustang.price); // 4000
